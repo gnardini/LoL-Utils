@@ -1,11 +1,5 @@
 const BASE_LINK = 'https://las.op.gg/multi/query=';
 
-// guaymallen se ha unido a la sala.
-// excelsior se ha unido a la sala.
-// Yakkult se ha unido a la sala.
-// rhosko se ha unido a la sala.
-// ndinu se ha unido a la sala.
-
 function areCharsEqual(lines, position) {
 	if (lines.length == 0 || lines[0].length < position) {
 		console.log(lines.length + ' ' + lines[0].length);
