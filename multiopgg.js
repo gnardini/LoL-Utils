@@ -1,4 +1,14 @@
-const BASE_LINK = 'https://las.op.gg/multi/query=';
+function region() {
+	return $('#region')[0].value;
+}
+
+function username() {
+	return $('#summoner_name')[0].value;
+}
+
+function baseMultiLink() {
+	return `https://${region()}.op.gg/multi/query=`
+}
 
 function areCharsEqual(lines, position) {
 	if (lines.length == 0 || lines[0].length < position) {
@@ -21,16 +31,12 @@ function calculatePostfixLength(lines) {
 }
 
 function generateLink() {
-	var link = BASE_LINK;
+	var link = baseMultiLink();
 	const playersText = $('#players_in_game')[0].value;
 	const playerLines = playersText.split('\n');
 	const postfixLength = calculatePostfixLength(playerLines);
 	playerLines.forEach(p => link += p.substring(0, p.length-postfixLength) + ',');
 	return link;
-};
-
-function username() {
-	return $('#summoner_name')[0].value;
 }
 
 function populateOPGGMultiLink(link) {
@@ -38,7 +44,21 @@ function populateOPGGMultiLink(link) {
 	linkTextNode[0].innerHTML = `<a target="_blank" href="${link}">${link}</a>`;
 }
 
+function saveUsernameAndRegion() {
+	localStorage.region = $('#region')[0].value;
+	localStorage.username = username();
+}
+
+function populateSavedFields() {
+	$('#summoner_name')[0].value = localStorage.username || '';
+	$('#region')[0].value = localStorage.region || 'las'
+}
+
 $('document').ready(function() {
+	populateSavedFields();
+	$('#live_game')[0].onclick = function() {
+		window.open(`https://${region()}.op.gg/summoner/spectator/userName=${username()}`);
+	};
 	$('#generate_link')[0].onclick = function() {
 		populateOPGGMultiLink(generateLink());
 	};
@@ -46,5 +66,11 @@ $('document').ready(function() {
 		const link = generateLink();
 		populateOPGGMultiLink(link);
 		window.open(link);
+	};
+	$('#summoner_name')[0].onchange = function() {
+		saveUsernameAndRegion();
+	};
+	$('#region')[0].onchange = function() {
+		saveUsernameAndRegion();
 	};
 });
