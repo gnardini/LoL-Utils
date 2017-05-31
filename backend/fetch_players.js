@@ -1,26 +1,27 @@
+require('dotenv').load();
 const rp = require('request-promise');
 
-const RIOT_API_KEY = '';
 const REGION_MAPPING = {
-  las: 'la2',
   na: 'na1',
   br: 'br1',
   eune: 'eun1',
   euw: 'euw1',
   jp: 'jp1',
   kr: 'kr',
+  las: 'la2',
   lan: 'la1',
   oce: 'oc1',
   tr: 'tr1',
   ru: 'ru',
 };
 let baseUrl;
+let riotApiKey;
 
 function getSummonerId(summonerName) {
   const options = {
     url: `${baseUrl}/lol/summoner/v3/summoners/by-name/${summonerName}`,
     headers: {
-      'X-Riot-Token': RIOT_API_KEY,
+      'X-Riot-Token': riotApiKey,
     },
   };
   return rp(options).then(result => JSON.parse(result).id);
@@ -30,7 +31,7 @@ function fetchCurrentMatchInfo(summonerId) {
   const options = {
     url: `${baseUrl}/lol/spectator/v3/active-games/by-summoner/${summonerId}`,
     headers: {
-      'X-Riot-Token': RIOT_API_KEY,
+      'X-Riot-Token': riotApiKey,
     },
   };
   return rp(options).then(result => JSON.parse(result).participants);
@@ -48,7 +49,7 @@ function processParticipant(participant) {
   const options = {
     url: `${baseUrl}/lol/champion-mastery/v3/champion-masteries/by-summoner/${participant.summonerId}/by-champion/${participant.championId}`,
     headers: {
-      'X-Riot-Token': RIOT_API_KEY,
+      'X-Riot-Token': riotApiKey,
     },
   };
   return rp(options)
@@ -61,6 +62,7 @@ function processParticipants(participants) {
 }
 
 exports.handler = (event, context, callback) => {
+  riotApiKey = process.env.RIOT_API_KEY;
   baseUrl = `https://${REGION_MAPPING[event.region]}.api.riotgames.com`;
   getSummonerId(event.summonerName)
     .then(fetchCurrentMatchInfo)
