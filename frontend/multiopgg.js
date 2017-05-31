@@ -59,6 +59,9 @@ $('document').ready(function() {
 	$('#live_game')[0].onclick = function() {
 		window.open(`https://${region()}.op.gg/summoner/spectator/userName=${username()}`);
 	};
+	$('#op_gg_page')[0].onclick = function() {
+		window.open(`https://${region()}.op.gg/summoner/userName=${username()}`);
+	};
 	$('#generate_link')[0].onclick = function() {
 		populateOPGGMultiLink(generateLink());
 	};
