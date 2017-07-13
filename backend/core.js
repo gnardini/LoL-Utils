@@ -29,10 +29,14 @@ module.exports = {
     const data = fs.readFileSync('data/champions_data.json', 'utf8')
     return JSON.parse(data)
   },
-  mkdirp(filepath) {
+  mkdirp(filepath, defaultValue) {
     const dirname = path.dirname(filepath)
     if (!fs.existsSync(dirname)) {
       fs.mkdirSync(dirname)
+    }
+    if (!fs.existsSync(filepath)) {
+      console.log(`Writing ${defaultValue}`)
+      fs.writeFileSync(filepath, defaultValue)
     }
   },
 }
