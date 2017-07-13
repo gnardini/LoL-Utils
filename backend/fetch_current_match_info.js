@@ -1,8 +1,8 @@
-require('dotenv').load();
-const core = require('./core');
-const rp = require('request-promise');
+require('dotenv').load()
+const core = require('./core')
+const rp = require('request-promise')
 
-let config;
+let config
 
 function fetchCurrentMatchInfo(summonerId) {
   const options = {
@@ -10,8 +10,8 @@ function fetchCurrentMatchInfo(summonerId) {
     headers: {
       'X-Riot-Token': config.riotApiKey,
     },
-  };
-  return rp(options).then(result => JSON.parse(result).participants);
+  }
+  return rp(options).then(result => JSON.parse(result).participants)
 }
 
 function wrapParticipant(participant, masteryPoints) {
@@ -19,7 +19,7 @@ function wrapParticipant(participant, masteryPoints) {
     summoner: participant.summonerName,
     championId: participant.championId,
     masteryPoints,
-  };
+  }
 }
 
 function processParticipant(participant) {
@@ -28,32 +28,32 @@ function processParticipant(participant) {
     headers: {
       'X-Riot-Token': config.riotApiKey,
     },
-  };
+  }
   return rp(options)
     .then(result => wrapParticipant(participant, JSON.parse(result).championPoints))
-    .catch(() => wrapParticipant(participant, -1));
+    .catch(() => wrapParticipant(participant, -1))
 }
 
 function processParticipants(participants) {
-  return Promise.all(participants.map(processParticipant));
+  return Promise.all(participants.map(processParticipant))
 }
 
 exports.handler = (event, context, callback) => {
   config = {
     riotApiKey: process.env.RIOT_API_KEY,
     baseUrl: `https://${core.REGION_MAPPING[event.region]}.api.riotgames.com`,
-  };
+  }
   core.getSummonerId(config, event.summonerName)
     .then(fetchCurrentMatchInfo)
     .then(processParticipants)
     .then(result => callback(null, result))
-    .catch(callback);
-};
+    .catch(callback)
+}
 
 exports.handler({
   summonerName: 'dyrus',
   region: 'na',
 }, null, (err, result) => {
-  console.log(`Error: ${err}`);
-  console.log(`Result: ${JSON.stringify(result, null, 4)}`);
-});
+  console.log(`Error: ${err}`)
+  console.log(`Result: ${JSON.stringify(result, null, 4)}`)
+})

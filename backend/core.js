@@ -1,6 +1,6 @@
-const rp = require('request-promise');
-const fs = require('fs');
-const path = require('path');
+const rp = require('request-promise')
+const fs = require('fs')
+const path = require('path')
 
 module.exports = {
   REGION_MAPPING: {
@@ -22,17 +22,17 @@ module.exports = {
       headers: {
         'X-Riot-Token': config.riotApiKey,
       },
-    };
-    return rp(options).then(result => JSON.parse(result).accountId);
+    }
+    return rp(options).then(result => JSON.parse(result).accountId)
   },
   readChampionsInfo() {
-    const data = fs.readFileSync('data/champions_data.json', 'utf8');
-    return JSON.parse(data);
+    const data = fs.readFileSync('data/champions_data.json', 'utf8')
+    return JSON.parse(data)
   },
   mkdirp(filepath) {
-    const dirname = path.dirname(filepath);
+    const dirname = path.dirname(filepath)
     if (!fs.existsSync(dirname)) {
-      fs.mkdirSync(dirname);
+      fs.mkdirSync(dirname)
     }
   },
-};
+}
