@@ -16,9 +16,6 @@ module.exports = {
     tr: 'tr1',
     ru: 'ru',
   },
-  baseUrl(region) {
-    return `https://${this.REGION_MAPPING[region]}.api.riotgames.com`
-  },
   getSummonerId(config, summonerName) {
     const options = {
       url: `${config.baseUrl}/lol/summoner/v3/summoners/by-name/${summonerName}`,
@@ -38,6 +35,7 @@ module.exports = {
       fs.mkdirSync(dirname)
     }
     if (!fs.existsSync(filepath)) {
+      console.log(`Writing ${defaultValue}`)
       fs.writeFileSync(filepath, defaultValue)
     }
   },

@@ -1,0 +1,14 @@
+{
+  "name": "lol-scripts-backend",
+  "version": "0.0.1",
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
